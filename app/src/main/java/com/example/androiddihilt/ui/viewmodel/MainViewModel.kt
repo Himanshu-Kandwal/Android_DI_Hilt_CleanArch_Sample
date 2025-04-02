@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
             delay(5000) // Simulating delay
             _userState.value = try {
                 val user = userUseCase()
-                Result.Success(user.toUserUi()) // Convert to UI model
+                Result.Success(user.toUserUi())
             } catch (e: Exception) {
                 Result.Error(e, "Unknown error")
             }
