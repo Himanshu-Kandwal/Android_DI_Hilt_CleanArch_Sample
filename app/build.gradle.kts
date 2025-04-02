@@ -75,18 +75,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
 
-    //livedata
-
-    val lifecycle_version = "2.8.7"
-
-    // LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
-    // Lifecycles only (without ViewModel or LiveData)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
-    // Lifecycle utilities for Compose
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
-
-    // Add Core Library Desugaring to enable Java 8 features on lower API levels
+    // Core Library Desugaring to enable Java 8 features on lower API levels
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
 }
