@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -29,22 +30,24 @@ fun MainScreen(
 ) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            when (userState) {
-                is UserState.Success -> {
-                    val user = userState.data
-                    UserCard(name = user.name, email = user.email)
-                }
+            Box(modifier = Modifier.height(200.dp)) { // Reserve space for UserCard
+                when (userState) {
+                    is UserState.Success -> {
+                        val user = userState.data
+                        UserCard(name = user.name, email = user.email)
+                    }
 
-                is UserState.Error -> {
-                    Text(text = "Error: ${userState.msg}")
-                }
+                    is UserState.Error -> {
+                        Text(text = "Error: ${userState.msg}")
+                    }
 
-                UserState.Loading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(32.dp),
-                        color = MaterialTheme.colorScheme.secondary,
-                        trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                    )
+                    UserState.Loading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(32.dp),
+                            color = MaterialTheme.colorScheme.secondary,
+                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                        )
+                    }
                 }
             }
 
