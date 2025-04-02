@@ -1,20 +1,18 @@
 package com.example.androiddihilt.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.androiddihilt.core.util.Result
-import com.example.androiddihilt.domain.model.User
-import com.example.androiddihilt.domain.repository.UserRepository
 import com.example.androiddihilt.domain.usecase.GetUserUseCase
 import com.example.androiddihilt.ui.mapper.toUserUi
 import com.example.androiddihilt.ui.model.UserUI
+import com.example.androiddihilt.ui.util.UserState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,23 +21,30 @@ class MainViewModel @Inject constructor(
     private val userUseCase: GetUserUseCase
 ) : ViewModel() {
 
-    private val _userState = MutableStateFlow<Result<UserUI>>(Result.Loading)
-    val userState: StateFlow<Result<UserUI>> = _userState.asStateFlow()
+    private val _userState = MutableStateFlow<UserState<UserUI>>(UserState.Loading)
 
-    init {
-        fetchUser()
-    }
+    val userState = _userState
+        .onStart { fetchUser() }
+        .distinctUntilChanged()
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            UserState.Loading
+        )
+
 
     fun fetchUser() {
         viewModelScope.launch {
-            _userState.value = Result.Loading
-            delay(5000) // Simulating delay
+            _userState.value = UserState.Loading
+            delay(5000)
             _userState.value = try {
                 val user = userUseCase()
-                Result.Success(user.toUserUi())
+                UserState.Success(user.toUserUi())
             } catch (e: Exception) {
-                Result.Error(e, "Unknown error")
+                UserState.Error(e, "Unknown error")
             }
         }
     }
+
+
 }

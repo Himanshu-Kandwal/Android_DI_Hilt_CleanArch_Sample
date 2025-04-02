@@ -18,28 +18,28 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.androiddihilt.ui.component.UserCard
 import com.example.androiddihilt.ui.model.UserUI
-import com.example.androiddihilt.core.util.Result
+import com.example.androiddihilt.ui.util.UserState
 import com.example.androiddihilt.ui.viewmodel.MainViewModel
 
 @Composable
 fun MainScreen(
-    userState: Result<UserUI>,
+    userState: UserState<UserUI>,
     onLoadUserButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             when (userState) {
-                is Result.Success -> {
+                is UserState.Success -> {
                     val user = userState.data
                     UserCard(name = user.name, email = user.email)
                 }
 
-                is Result.Error -> {
+                is UserState.Error -> {
                     Text(text = "Error: ${userState.msg}")
                 }
 
-                Result.Loading -> {
+                UserState.Loading -> {
                     CircularProgressIndicator(
                         modifier = Modifier.size(64.dp),
                         color = MaterialTheme.colorScheme.secondary,
@@ -74,6 +74,6 @@ fun MainScreen(
 @Preview(showBackground = true)
 fun MainScreenPreview() {
     MainScreen(
-        userState = Result.Success(UserUI("John Doe", "john.doe@example.com")),
+        userState = UserState.Success(UserUI("John Doe", "john.doe@example.com")),
         onLoadUserButtonClick = {})
 }
