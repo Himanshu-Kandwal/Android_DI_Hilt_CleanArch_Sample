@@ -30,11 +30,19 @@ fun MainScreen(
 ) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(modifier = Modifier.height(200.dp)) { // Reserve space for UserCard
+            Box(
+                modifier = Modifier.height(120.dp),
+                contentAlignment = Alignment.Center
+            ) { // Reserve space for UserCard
                 when (userState) {
                     is UserState.Success -> {
                         val user = userState.data
-                        UserCard(name = user.name, email = user.email)
+                        UserCard(
+                            name = user.name,
+                            email = user.email,
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
                     }
 
                     is UserState.Error -> {
