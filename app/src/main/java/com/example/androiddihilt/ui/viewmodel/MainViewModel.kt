@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
     fun fetchUser() {
         viewModelScope.launch {
             _userState.value = UserState.Loading
-            delay(5000)
+            delay(3000)
             _userState.value = try {
                 val user = userUseCase()
                 UserState.Success(user.toUserUi())

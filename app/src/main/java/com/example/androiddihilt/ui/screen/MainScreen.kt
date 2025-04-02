@@ -41,7 +41,7 @@ fun MainScreen(
 
                 UserState.Loading -> {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(64.dp),
+                        modifier = Modifier.size(32.dp),
                         color = MaterialTheme.colorScheme.secondary,
                         trackColor = MaterialTheme.colorScheme.surfaceVariant,
                     )
